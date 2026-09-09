@@ -1,0 +1,63 @@
+# config.yaml — edit this file before running the Snakemake workflow.
+#
+# Paths marked REQUIRED have no default and must be set before running.
+# Paths marked with a default value can be left as-is for the NDSU/Hulke-lab setup.
+# See the "Porting to a New System" section of README.md for guidance.
+
+# ── Input ───────────────────────────────────────────────────────────────────
+# GENLIST.txt produced by 00_prep_manifest.pbs or 00_prep_local_fastq.sh
+genlist:  /path/to/GENLIST.txt          # REQUIRED
+fq_dir:   /path/to/fastq                # REQUIRED — directory of input FASTQs
+
+# ── Output directories ──────────────────────────────────────────────────────
+bam_dir:      /path/to/bam              # REQUIRED
+gvcf_dir:     /path/to/gvcf             # REQUIRED
+vcf_dir:      /path/to/vcf              # REQUIRED
+imputed_dir:  /path/to/imputed          # REQUIRED
+
+# ── Reference genome ────────────────────────────────────────────────────────
+# Individual file paths (ref FASTA, chromosome list, repeat BED) are derived
+# from genome_dir in the Snakefile. Mirrors GENOME_DIR in site_config.sh.
+genome_dir: /mmfs1/projects/brent.hulke/sunflower_reference_genomes/HA412HOv2_w_CPMT
+
+# ── Software ────────────────────────────────────────────────────────────────
+# Mirrors SOFTWARE_DIR and BEAGLE_JAR in site_config.sh.
+software_dir: /mmfs1/projects/brent.hulke/software
+beagle_jar:   /mmfs1/home/brian.smart/projects/software/beagle.27Feb25.75f.jar
+
+# ── Cluster modules ─────────────────────────────────────────────────────────
+# Adjust module names to match your HPC's module system.
+# Set a value to "" to skip loading that module (e.g. if the tool is on PATH).
+modules:
+  samtools: samtools/1.20
+  gatk:     gatk
+  bcftools: bcftools/1.20
+  parallel: parallel
+
+# ── Project / cohort ────────────────────────────────────────────────────────
+cohort:       MyProject                 # REQUIRED — used in output filenames
+pop_list_dir: /path/to/population_lists # REQUIRED — one .txt file per population
+
+# List every population name (the filename without .txt in pop_list_dir).
+# Snakemake must know output filenames before the workflow runs.
+populations:                            # REQUIRED
+  - pop1
+  - pop2
+
+# ── Scratch space ───────────────────────────────────────────────────────────
+# Both PBS and SLURM set $TMPDIR to a job-local directory automatically.
+# Override if your site uses a different variable (e.g. $SCRATCH on some PBS
+# systems, $LOCAL_SCRATCH on some SLURM systems).
+scratch_dir: "$TMPDIR"
+
+# ── PBS-specific settings ───────────────────────────────────────────────────
+# Used by profiles/pbs/config.yaml. Ignored when running with the SLURM profile.
+pbs_group:         x-ccast-prj-hulke
+pbs_queue_default: default
+pbs_queue_large:   condo05             # queue with large-memory nodes (≥250 GB)
+
+# ── SLURM-specific settings ─────────────────────────────────────────────────
+# Used by profiles/slurm/config.yaml. Ignored when running with the PBS profile.
+# Replace YOUR_*_HERE with your cluster's actual partition names.
+slurm_partition_default: YOUR_PARTITION_HERE
+slurm_partition_large:   YOUR_HIGHMEM_PARTITION_HERE

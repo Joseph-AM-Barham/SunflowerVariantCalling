@@ -1,0 +1,35 @@
+# PBS/Torque cluster profile for Snakemake >= 7.1
+#
+# Usage:
+#   snakemake --profile profiles/pbs
+#
+# For Snakemake 8.x, replace `cluster:` / `cluster-status:` with the
+# snakemake-executor-plugin-cluster-generic equivalents:
+#   executor: cluster-generic
+#   cluster-generic-submit-cmd: qsub ...
+#   cluster-generic-status-cmd: profiles/pbs/status.sh {jobid}
+#   cluster-generic-cancel-cmd: qdel {jobid}
+
+cluster: >-
+  qsub
+  -N smk_{rule}
+  -q {resources.queue}
+  -l select=1:ncpus={resources.cpus}:mem={resources.mem_mb}mb
+  -l walltime={resources.walltime}
+  -j oe
+  -W group_list={config[pbs_group]}
+  -o logs/cluster/{rule}_{wildcards}.out
+
+cluster-status: profiles/pbs/status.sh
+
+default-resources:
+  - cpus=1
+  - mem_mb=4000
+  - walltime="24:00:00"
+  - queue=config["pbs_queue_default"]
+
+jobs: 500
+latency-wait: 60
+rerun-incomplete: true
+printshellcmds: true
+keep-going: false

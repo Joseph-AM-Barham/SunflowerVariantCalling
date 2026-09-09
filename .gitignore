@@ -1,0 +1,5 @@
+# Snakemake runtime state (created automatically on first run)
+.snakemake/
+
+# Cluster and rule logs (runtime artifacts)
+logs/

@@ -1,0 +1,40 @@
+# SLURM cluster profile for Snakemake >= 7.1
+#
+# Usage:
+#   snakemake --profile profiles/slurm
+#
+# Before using: set slurm_partition_default and slurm_partition_large in
+# config/config.yaml to match your cluster's actual partition names.
+#
+# For Snakemake 8.x, replace `cluster:` / `cluster-status:` with the
+# snakemake-executor-plugin-cluster-generic equivalents:
+#   executor: cluster-generic
+#   cluster-generic-submit-cmd: sbatch ...
+#   cluster-generic-status-cmd: profiles/slurm/status.sh {jobid}
+#   cluster-generic-cancel-cmd: scancel {jobid}
+
+cluster: >-
+  sbatch
+  --partition={resources.partition}
+  --ntasks=1
+  --cpus-per-task={resources.cpus}
+  --mem={resources.mem_mb}M
+  --time={resources.walltime}
+  --job-name=smk_{rule}
+  --output=logs/cluster/{rule}_{wildcards}.out
+  --error=logs/cluster/{rule}_{wildcards}.err
+  --parsable
+
+cluster-status: profiles/slurm/status.sh
+
+default-resources:
+  - cpus=1
+  - mem_mb=4000
+  - walltime="24:00:00"
+  - partition=config["slurm_partition_default"]
+
+jobs: 500
+latency-wait: 60
+rerun-incomplete: true
+printshellcmds: true
+keep-going: false
