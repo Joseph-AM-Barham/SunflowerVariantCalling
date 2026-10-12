@@ -4,23 +4,23 @@
 #PBS -l select=1:ncpus=1:mem=4gb
 #PBS -l walltime=24:00:00
 #PBS -j oe
-#PBS -W group_list=x-ccast-prj-hulke
+#PBS -W group_list=YOUR_PBS_GROUP_HERE
 
 # Generates MANIFEST.txt, GENLIST.txt, and SRR_LIST.txt by querying NCBI.
 # Run this once before 01_download_srr.pbs if you do not already have these files.
 #
-# REQUIRED ARGS: INPUT, INPUT_TYPE, OUT_DIR
+# REQUIRED ARGS: INPUT, INPUT_TYPE, OUT_DIR, EMAIL (unless the default below is edited)
 #   INPUT_TYPE "srr"        — INPUT is a file with one SRR/ERR/DRR accession per line
 #   INPUT_TYPE "bioproject" — INPUT is a BioProject/study accession (e.g. PRJNA1130108 or SRP...)
 #
 # OPTIONAL ARGS:
-#   EMAIL  — email for NCBI queries
+#   EDIRECT_PATH — directory containing NCBI edirect tools (esearch, efetch)
 #
 # Usage:
 #   From SRR list:
-#     qsub -v "INPUT=/path/to/srr_list.txt,INPUT_TYPE=srr,OUT_DIR=/path/to/out" 00_prep_manifest.pbs
+#     qsub -v "INPUT=/path/to/srr_list.txt,INPUT_TYPE=srr,OUT_DIR=/path/to/out,EMAIL=you@example.org" 00_prep_manifest.pbs
 #   From BioProject:
-#     qsub -v "INPUT=PRJNA1130108,INPUT_TYPE=bioproject,OUT_DIR=/path/to/out" 00_prep_manifest.pbs
+#     qsub -v "INPUT=PRJNA1130108,INPUT_TYPE=bioproject,OUT_DIR=/path/to/out,EMAIL=you@example.org" 00_prep_manifest.pbs
 #
 # Outputs (all in OUT_DIR):
 #   MANIFEST.txt — tab-delimited SAMPLE_NAME<TAB>SRR_ID, one SRR per row (multiple rows per sample ok)
@@ -35,8 +35,14 @@
 
 set -euo pipefail
 
-EDIRECT_PATH="/mmfs1/projects/brent.hulke/software/edirect"
-#EMAIL="${EMAIL:-PLACEHOLDER}"
+EDIRECT_PATH="${EDIRECT_PATH:-/path/to/edirect}"
+EMAIL="${EMAIL:-PLACEHOLDER}"
+if [ "$EMAIL" = "PLACEHOLDER" ]; then
+    echo "ERROR: EMAIL is not set. NCBI requires a contact email for queries." >&2
+    echo "  Pass it at submission: qsub -v \"EMAIL=you@example.org,...\" 00_prep_manifest.pbs" >&2
+    echo "  or edit the EMAIL default in this script." >&2
+    exit 1
+fi
 BATCH_SIZE=100     # SRRs per NCBI query batch (for INPUT_TYPE=srr)
 BATCH_SLEEP=5      # seconds between batches to avoid rate limiting
 

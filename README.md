@@ -56,6 +56,8 @@ Two files need editing for a new system. Both expose the same three logical root
 genome_dir:   /path/to/HA412HOv2_w_CPMT
 software_dir: /path/to/software
 beagle_jar:   /path/to/beagle.jar
+pbs_group:               YOUR_PBS_GROUP_HERE          # PBS only
+pbs_queue_large:         YOUR_HIGHMEM_QUEUE_HERE
 slurm_partition_default: YOUR_PARTITION_HERE   # SLURM only
 slurm_partition_large:   YOUR_HIGHMEM_PARTITION_HERE
 ```
@@ -94,7 +96,7 @@ qsub -q myqueue -W group_list=mygroup 03_trim_align_markdup.pbs
 
 ```bash
 # 1. Generate MANIFEST and GENLIST from an SRR list (skip if you already have them)
-qsub -v "INPUT=/path/to/srr_list.txt,INPUT_TYPE=srr,OUT_DIR=/path/to/lists" \
+qsub -v "INPUT=/path/to/srr_list.txt,INPUT_TYPE=srr,OUT_DIR=/path/to/lists,EMAIL=you@example.org" \
      00_prep_manifest.pbs
 
 # 2. Download SRA files (set -J to number of SRRs)
@@ -189,8 +191,8 @@ qsub -J 1-$N \
 ### 00_prep_manifest.pbs
 Queries NCBI for sample metadata and builds the manifest files needed by downstream scripts. Accepts either a flat list of SRR accessions or a BioProject/study accession. SRRs are queried in batches of 100 to stay within NCBI rate limits.
 
-**Args:** `INPUT`, `INPUT_TYPE` (`srr` or `bioproject`), `OUT_DIR`  
-**Optional:** `EMAIL` (NCBI queries; default: `joseph.barham@ndsu.edu`)  
+**Args:** `INPUT`, `INPUT_TYPE` (`srr` or `bioproject`), `OUT_DIR`, `EMAIL` (contact for NCBI queries; the job exits if unset)  
+**Optional:** `EDIRECT_PATH` (edirect install directory; edit the default in the script or pass via `-v`)  
 **Outputs:** `MANIFEST.txt`, `GENLIST.txt`, `SRR_LIST.txt`
 
 ---

@@ -1,7 +1,7 @@
 # config.yaml — edit this file before running the Snakemake workflow.
 #
 # Paths marked REQUIRED have no default and must be set before running.
-# Paths marked with a default value can be left as-is for the NDSU/Hulke-lab setup.
+# Values written as /path/to/... or YOUR_*_HERE are placeholders for your site.
 # See the "Porting to a New System" section of README.md for guidance.
 
 # ── Input ───────────────────────────────────────────────────────────────────
@@ -18,12 +18,12 @@ imputed_dir:  /path/to/imputed          # REQUIRED
 # ── Reference genome ────────────────────────────────────────────────────────
 # Individual file paths (ref FASTA, chromosome list, repeat BED) are derived
 # from genome_dir in the Snakefile. Mirrors GENOME_DIR in site_config.sh.
-genome_dir: /mmfs1/projects/brent.hulke/sunflower_reference_genomes/HA412HOv2_w_CPMT
+genome_dir: /path/to/HA412HOv2_w_CPMT    # REQUIRED
 
 # ── Software ────────────────────────────────────────────────────────────────
 # Mirrors SOFTWARE_DIR and BEAGLE_JAR in site_config.sh.
-software_dir: /mmfs1/projects/brent.hulke/software
-beagle_jar:   /mmfs1/home/brian.smart/projects/software/beagle.27Feb25.75f.jar
+software_dir: /path/to/software          # REQUIRED — contains fastp, bwa-mem2/, mosdepth
+beagle_jar:   /path/to/beagle.jar        # REQUIRED — BEAGLE 5.5 jar
 
 # ── Cluster modules ─────────────────────────────────────────────────────────
 # Adjust module names to match your HPC's module system.
@@ -52,9 +52,9 @@ scratch_dir: "$TMPDIR"
 
 # ── PBS-specific settings ───────────────────────────────────────────────────
 # Used by profiles/pbs/config.yaml. Ignored when running with the SLURM profile.
-pbs_group:         x-ccast-prj-hulke
+pbs_group:         YOUR_PBS_GROUP_HERE
 pbs_queue_default: default
-pbs_queue_large:   condo05             # queue with large-memory nodes (≥250 GB)
+pbs_queue_large:   YOUR_HIGHMEM_QUEUE_HERE   # queue with large-memory nodes (≥250 GB)
 
 # ── SLURM-specific settings ─────────────────────────────────────────────────
 # Used by profiles/slurm/config.yaml. Ignored when running with the PBS profile.

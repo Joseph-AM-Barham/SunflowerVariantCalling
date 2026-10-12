@@ -4,7 +4,7 @@
 #PBS -l select=1:ncpus=1:mem=4gb
 #PBS -l walltime=24:00:00
 #PBS -j oe
-#PBS -W group_list=x-ccast-prj-hulke
+#PBS -W group_list=YOUR_PBS_GROUP_HERE
 #PBS -J 1-1
 # Set -J to the number of lines in SRR_LIST before submitting.
 # Tip: n=$(wc -l < /path/to/SRR_LIST.txt) && qsub -J 1-$n ...
