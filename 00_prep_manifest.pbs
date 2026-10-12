@@ -14,7 +14,7 @@
 #   INPUT_TYPE "bioproject" — INPUT is a BioProject/study accession (e.g. PRJNA1130108 or SRP...)
 #
 # OPTIONAL ARGS:
-#   EMAIL  — email for NCBI queries (default: joseph.barham@ndsu.edu)
+#   EMAIL  — email for NCBI queries
 #
 # Usage:
 #   From SRR list:
@@ -36,7 +36,7 @@
 set -euo pipefail
 
 EDIRECT_PATH="/mmfs1/projects/brent.hulke/software/edirect"
-EMAIL="${EMAIL:-joseph.barham@ndsu.edu}"
+#EMAIL="${EMAIL:-PLACEHOLDER}"
 BATCH_SIZE=100     # SRRs per NCBI query batch (for INPUT_TYPE=srr)
 BATCH_SLEEP=5      # seconds between batches to avoid rate limiting
 

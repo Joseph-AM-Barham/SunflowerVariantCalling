@@ -13,6 +13,6 @@
 # SOFTWARE_DIR — directory containing fastp, bwa-mem2/, mosdepth, pigz
 # BEAGLE_JAR   — path to the BEAGLE 5.5 jar file
 
-GENOME_DIR="${GENOME_DIR:-/mmfs1/projects/brent.hulke/sunflower_reference_genomes/HA412HOv2_w_CPMT}"
-SOFTWARE_DIR="${SOFTWARE_DIR:-/mmfs1/projects/brent.hulke/software}"
-BEAGLE_JAR="${BEAGLE_JAR:-/mmfs1/home/brian.smart/projects/software/beagle.27Feb25.75f.jar}"
+GENOME_DIR="${GENOME_DIR:-PLACEHOLDER}"
+SOFTWARE_DIR="${SOFTWARE_DIR:-PLACEHOLDER}"
+BEAGLE_JAR="${BEAGLE_JAR:-PLACEHOLDER}"
